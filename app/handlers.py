@@ -15,14 +15,14 @@ from aiogram.fsm.context import FSMContext
 # )
 
 #PostgreSQL
-from DB.PostgreSQL.connect import create_connection
-from DB.PostgreSQL.insert import (
-    insert_email,
-    insert_message,
-    insert_phone,
-    insert_user,
-    user_exists,
-)
+# from DB.PostgreSQL.connect import create_connection
+# from DB.PostgreSQL.insert import (
+#     insert_email,
+#     insert_message,
+#     insert_phone,
+#     insert_user,
+#     user_exists,
+# )
 
 import app.keyboards as kb
 
@@ -40,10 +40,10 @@ async def cmd_start(message: Message):
     username = message.from_user.username
 
     # SQLite PostgreSQL
-    with create_connection() as conn:
-        if conn is not None:
-            if not user_exists(conn, user_id):
-                insert_user(conn, user_id, username)
+    # with create_connection() as conn:
+    #     if conn is not None:
+    #         if not user_exists(conn, user_id):
+    #             insert_user(conn, user_id, username)
 
 
 
@@ -87,15 +87,15 @@ async def register_email(message: Message, state: FSMContext):
     email_text = message.text
 
     # SQLite PostgeSQL
-    if email_text:
-        with create_connection() as conn:  # SQLite
-            if conn is not None:
-                insert_email(conn, user_id, email_text)
-                await state.update_data(email=email_text)
-                await state.set_state(Register.phone)
-                await message.answer("Enter your phone", reply_markup=kb.get_number)
-    else:
-        await message.answer("You have not entered your email address!")
+    # if email_text:
+    #     with create_connection() as conn:  # SQLite
+    #         if conn is not None:
+    #             insert_email(conn, user_id, email_text)
+    #             await state.update_data(email=email_text)
+    #             await state.set_state(Register.phone)
+    #             await message.answer("Enter your phone", reply_markup=kb.get_number)
+    # else:
+    #     await message.answer("You have not entered your email address!")
 
 
 @router.message(Register.phone, F.contact)
@@ -104,15 +104,15 @@ async def register_phone(message: Message, state: FSMContext):
     phone_text = message.contact.phone_number
 
     # SQLite PostgreSQL
-    if phone_text:
-        with create_connection() as conn:
-            if conn is not None:
-                insert_phone(conn, user_id, phone_text)
-                await state.update_data(phone=phone_text)
-                await state.clear()
-                await message.answer("Nice", reply_markup=kb.main)
-    else:
-        await message.answer("You have not entered your phone!")
+    # if phone_text:
+    #     with create_connection() as conn:
+    #         if conn is not None:
+    #             insert_phone(conn, user_id, phone_text)
+    #             await state.update_data(phone=phone_text)
+    #             await state.clear()
+    #             await message.answer("Nice", reply_markup=kb.main)
+    # else:
+    #     await message.answer("You have not entered your phone!")
 
 
 @router.message(Command("echo"))
@@ -120,13 +120,13 @@ async def echo(message: Message):
     text = message.text[len("/echo ") :]
 
     # SQLite PostgreSQL
-    if text:
-        with create_connection() as conn:
-            if conn is not None:
-                insert_message(conn, message.from_user.id, text)
-                await message.answer(text)
-    else:
-        await message.answer("Write something after the /echo command!")
+    # if text:
+    #     with create_connection() as conn:
+    #         if conn is not None:
+    #             insert_message(conn, message.from_user.id, text)
+    #             await message.answer(text)
+    # else:
+    #     await message.answer("Write something after the /echo command!")
 
 
 @router.message(Command("stop"))
