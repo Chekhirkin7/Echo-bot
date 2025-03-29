@@ -20,7 +20,7 @@ main = ReplyKeyboardMarkup(
 
 help = InlineKeyboardMarkup(
     inline_keyboard=[
-        [InlineKeyboardButton(text="Start", callback_data="/start")],
+        [InlineKeyboardButton(text="Start", callback_data="start")],
         [InlineKeyboardButton(text="Help", callback_data="help")],
         [InlineKeyboardButton(text="About", callback_data="about")],
         [InlineKeyboardButton(text="Echo", callback_data="echo")],

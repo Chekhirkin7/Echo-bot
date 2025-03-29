@@ -63,5 +63,5 @@ if __name__ == "__main__":
                 # create_table(conn, sql_add_column_phone)
             else:
                 print("Error! Cannot creat the database connection.")
-    except RuntimeError as err:
+    except Exception as err:
         logging.error(err)
