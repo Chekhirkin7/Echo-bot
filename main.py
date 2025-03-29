@@ -1,11 +1,15 @@
 import asyncio
 from aiogram import Bot, Dispatcher
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 from app.handlers import router
 
 
 async def main():
-    bot = Bot(token="7735664698:AAF0O_w3uot3HKh-oZZo3AuyUl4-yCGWn9c")
+    bot = Bot(token=os.getenv("TELEGRAM_BOT_API"))
     dp = Dispatcher()
     dp.include_router(router)
     await dp.start_polling(bot)
