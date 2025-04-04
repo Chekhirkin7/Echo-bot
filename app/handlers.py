@@ -4,6 +4,8 @@ from aiogram.filters import CommandStart, Command
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
 
+import app.keyboards as kb
+
 # SQLite
 # from DB.SQLite.connect import create_connection
 # from DB.SQLite.insert import (
@@ -14,7 +16,7 @@ from aiogram.fsm.context import FSMContext
 #     insert_phone,
 # )
 
-#PostgreSQL
+# PostgreSQL
 # from DB.PostgreSQL.connect import create_connection
 # from DB.PostgreSQL.insert import (
 #     insert_email,
@@ -24,7 +26,9 @@ from aiogram.fsm.context import FSMContext
 #     user_exists,
 # )
 
-import app.keyboards as kb
+# SQLAlchemy Core
+# from DB.SQLAlchemy.sqlalchemy_core import engine, users, messages
+
 
 router = Router()
 
@@ -45,14 +49,20 @@ async def cmd_start(message: Message):
     #         if not user_exists(conn, user_id):
     #             insert_user(conn, user_id, username)
 
+    # SQLAlchemy Core
+    # with engine.connect() as conn:
+    #     ins_user = users.insert().values(id=user_id, username=username)
+    #     conn.execute(ins_user)
+    #     conn.commit()
 
+    # await message.answer("Hello!", reply_markup=kb.main)
 
-    await message.answer("Hello!", reply_markup=kb.main)
 
 @router.callback_query(F.data == "start")
 async def help(callback: CallbackQuery):
     await callback.message.answer("Hello")
     await callback.answer("Hello")
+
 
 @router.message(Command("help"))
 async def help(message: Message):
@@ -74,6 +84,7 @@ async def about(message: Message):
 async def about(callback: CallbackQuery):
     await callback.message.answer("This bot repeats your messages like an echo.")
     await callback.answer("This bot repeats your messages like an echo.")
+
 
 @router.message(Command("register"))
 async def register(message: Message, state: FSMContext):
@@ -97,6 +108,18 @@ async def register_email(message: Message, state: FSMContext):
     # else:
     #     await message.answer("You have not entered your email address!")
 
+    # SQLAlchemy Core
+    # if email_text:
+    #     with engine.connect() as conn:
+    #         ins_email = users.update().where(users.c.id == user_id).values(email=email_text)
+    #         conn.execute(ins_email)
+    #         conn.commit()
+    #         await state.update_data(email=email_text)
+    #         await state.set_state(Register.phone)
+    #         await message.answer("Enter your phone", reply_markup=kb.get_number)
+    # else:
+    #     await message.answer("You have not entered your email address!")
+
 
 @router.message(Register.phone, F.contact)
 async def register_phone(message: Message, state: FSMContext):
@@ -114,6 +137,18 @@ async def register_phone(message: Message, state: FSMContext):
     # else:
     #     await message.answer("You have not entered your phone!")
 
+    # SQLAlchemy Core
+    # if phone_text:
+    #     with engine.connect() as conn:
+    #         ins_phone = users.update().where(users.c.id == user_id).values(phone=phone_text)
+    #         conn.execute(ins_phone)
+    #         conn.commit()
+    #         await state.update_data(phone=phone_text)
+    #         await state.clear()
+    #         await message.answer("Nice", reply_markup=kb.main)
+    # else:
+    #     await message.answer("You have not entered your phone!")
+
 
 @router.message(Command("echo"))
 async def echo(message: Message):
@@ -125,6 +160,16 @@ async def echo(message: Message):
     #         if conn is not None:
     #             insert_message(conn, message.from_user.id, text)
     #             await message.answer(text)
+    # else:
+    #     await message.answer("Write something after the /echo command!")
+
+    # SQLAlchemy Core
+    # if text:
+    #     with engine.connect() as conn:
+    #         ins_message = messages.insert().values(user_id=message.from_user.id, message_text=text)
+    #         conn.execute(ins_message)
+    #         conn.commit()
+    #         await message.answer(text)
     # else:
     #     await message.answer("Write something after the /echo command!")
 
