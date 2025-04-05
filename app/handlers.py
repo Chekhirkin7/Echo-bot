@@ -29,6 +29,11 @@ import app.keyboards as kb
 # SQLAlchemy Core
 # from DB.SQLAlchemy.sqlalchemy_core import engine, users, messages
 
+# SQLAlchemy session v1
+# from DB.SQLAlchemy.sqlalchemy_session_1 import session, User, Message
+
+# SQLAlchemy session v2
+# from DB.SQLAlchemy.sqlalchemy_session_2 import session, User, Message
 
 router = Router()
 
@@ -54,6 +59,15 @@ async def cmd_start(message: Message):
     #     ins_user = users.insert().values(id=user_id, username=username)
     #     conn.execute(ins_user)
     #     conn.commit()
+
+    # SQLAlchemy session v1, v2
+    # user = session.query(User).filter_by(id=user_id).first()
+
+    # if not user:
+    #     user = User(id=user_id, username=username)
+    #     session.add(user)
+    #     session.commit()
+    #     session.close()
 
     # await message.answer("Hello!", reply_markup=kb.main)
 
@@ -120,6 +134,22 @@ async def register_email(message: Message, state: FSMContext):
     # else:
     #     await message.answer("You have not entered your email address!")
 
+    # SQLAlchemy session v1, v2
+    # if email_text:
+    #     # session.query(User).filter_by(id=user_id).update({"email": email_text})
+    #     # session.commit()
+    #     # session.close()
+    #     user = session.query(User).filter_by(id=user_id).first()
+    #     if user:
+    #         user.email = email_text
+    #         session.commit()
+    #         session.close()
+    #         await state.update_data(email=email_text)
+    #         await state.set_state(Register.phone)
+    #         await message.answer("Enter your phone", reply_markup=kb.get_number)
+    # else:
+    #     await message.answer("You have not entered your email address!")
+
 
 @router.message(Register.phone, F.contact)
 async def register_phone(message: Message, state: FSMContext):
@@ -149,6 +179,17 @@ async def register_phone(message: Message, state: FSMContext):
     # else:
     #     await message.answer("You have not entered your phone!")
 
+    # SQLAlchemy session v1, v2
+    # if phone_text:
+    #     session.query(User).filter_by(id=user_id).update({"phone": phone_text})
+    #     session.commit()
+    #     session.close()
+    #     await state.update_data(phone=phone_text)
+    #     await state.clear()
+    #     await message.answer("Nice", reply_markup=kb.main)
+    # else:
+    #     await message.answer("You have not entered your phone!")
+
 
 @router.message(Command("echo"))
 async def echo(message: Message):
@@ -170,6 +211,16 @@ async def echo(message: Message):
     #         conn.execute(ins_message)
     #         conn.commit()
     #         await message.answer(text)
+    # else:
+    #     await message.answer("Write something after the /echo command!")
+
+    # SQLAlchemy session v1, v2
+    # if text:
+    #     message_user = Message(user_id=message.from_user.id, message_text=text)
+    #     session.add(message_user)
+    #     session.commit()
+    #     session.close()
+    #     await message.answer(text)
     # else:
     #     await message.answer("Write something after the /echo command!")
 
