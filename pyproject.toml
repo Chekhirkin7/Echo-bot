@@ -12,7 +12,8 @@ dependencies = [
     "asyncio (>=3.4.3,<4.0.0)",
     "psycopg2 (>=2.9.10,<3.0.0)",
     "python-dotenv (>=1.1.0,<2.0.0)",
-    "sqlalchemy (>=2.0.40,<3.0.0)"
+    "sqlalchemy (>=2.0.40,<3.0.0)",
+    "pymongo (>=4.11.3,<5.0.0)"
 ]
 
 
