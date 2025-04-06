@@ -36,7 +36,10 @@ import app.keyboards as kb
 # from DB.SQLAlchemy.sqlalchemy_session_2 import session, User, Message
 
 # MongoDB pymongo
-from DB.mondodb.pymongo import db
+# from DB.mondodb.pymongo import db
+
+# MongoDB mongoengine
+# from DB.mondodb.mongoengine import User, MessageText
 
 router = Router()
 
@@ -75,16 +78,24 @@ async def cmd_start(message: Message):
     # await message.answer("Hello!", reply_markup=kb.main)
 
     # MongoDB pymongo
-    user = db.users.find({"id": user_id})
-    if not user:
-        db.users.insert_one(
-            {
-                "id": user_id,
-                "username": username,
-            }
-        )
+    # user = db.users.find({"id": user_id})
+    # if not user:
+    #     db.users.insert_one(
+    #         {
+    #             "id": user_id,
+    #             "username": username,
+    #         }
+    #     )
 
-    await message.answer("Hello!", reply_markup=kb.main)
+    # await message.answer("Hello!", reply_markup=kb.main)
+
+    # MongoDB mongoengine
+    # user = User.objects(id=user_id).first()
+    # if not user:
+    #     user = User(id=user_id, username=username)
+    #     user.save()
+
+    # await message.answer("Hello!", reply_markup=kb.main)
 
 
 @router.callback_query(F.data == "start")
@@ -166,20 +177,31 @@ async def register_email(message: Message, state: FSMContext):
     #     await message.answer("You have not entered your email address!")
 
     # MongoDB pymongo
-    if email_text:
-        db.users.update_one(
-            {"id": user_id},
-            {
-                "$set": {
-                    "email": email_text,
-                }
-            },
-        )
-        await state.update_data(email=email_text)
-        await state.set_state(Register.phone)
-        await message.answer("Enter your phone", reply_markup=kb.get_number)
-    else:
-        await message.answer("You have not entered your email address!")
+    # if email_text:
+    #     db.users.update_one(
+    #         {"id": user_id},
+    #         {
+    #             "$set": {
+    #                 "email": email_text,
+    #             }
+    #         },
+    #     )
+    #     await state.update_data(email=email_text)
+    #     await state.set_state(Register.phone)
+    #     await message.answer("Enter your phone", reply_markup=kb.get_number)
+    # else:
+    #     await message.answer("You have not entered your email address!")
+
+    # MongoDB mongoengine
+    # if email_text:
+    #     user = User.objects(id=user_id).first()
+    #     user.email = email_text
+    #     user.save()
+    #     await state.update_data(email=email_text)
+    #     await state.set_state(Register.phone)
+    #     await message.answer("Enter your phone", reply_markup=kb.get_number)
+    # else:
+    #     await message.answer("You have not entered your email address!")
 
 
 @router.message(Register.phone, F.contact)
@@ -222,20 +244,29 @@ async def register_phone(message: Message, state: FSMContext):
     #     await message.answer("You have not entered your phone!")
 
     # MongoDB pymongo
-    if phone_text:
-        db.users.update_one(
-            {"id": user_id},
-            {
-                "$set": {
-                    "phone": phone_text,
-                }
-            },
-        )
-        await state.update_data(phone=phone_text)
-        await state.clear()
-        await message.answer("Nice", reply_markup=kb.main)
-    else:
-        await message.answer("You have not entered your phone!")
+    #     if phone_text:
+    #         db.users.update_one(
+    #             {"id": user_id},
+    #             {
+    #                 "$set": {
+    #                     "phone": phone_text,
+    #                 }
+    #             },
+    #         )
+    #         await state.update_data(phone=phone_text)
+    #         await state.clear()
+    #         await message.answer("Nice", reply_markup=kb.main)
+    #     else:
+    #         await message.answer("You have not entered your phone!")
+
+    # MongoDB mongoengine
+    # if phone_text:
+    #     User.objects(id=user_id).update(set__phone=phone_text)
+    #     await state.update_data(phone=phone_text)
+    #     await state.clear()
+    #     await message.answer("Nice", reply_markup=kb.main)
+    # else:
+    #     await message.answer("You have not entered your phone!")
 
 
 @router.message(Command("echo"))
@@ -272,16 +303,24 @@ async def echo(message: Message):
     #     await message.answer("Write something after the /echo command!")
 
     # MongoDB pymongo
-    if text:
-        db.messages.insert_one(
-            {
-                "user_id": message.from_user.id,
-                'message_text': text,
-            }
-        )
-        await message.answer(text)
-    else:
-        await message.answer("Write something after the /echo command!")
+    # if text:
+    #     db.messages.insert_one(
+    #         {
+    #             "user_id": message.from_user.id,
+    #             'message_text': text,
+    #         }
+    #     )
+    #     await message.answer(text)
+    # else:
+    #     await message.answer("Write something after the /echo command!")
+
+    # MongoDB mongoengine
+    # if text:
+    #     msg = MessageText(user_id=message.from_user.id, message_text=text)
+    #     msg.save()
+    #     await message.answer(text)
+    # else:
+    #     await message.answer("Write something after the /echo command!")
 
 
 @router.message(Command("stop"))
